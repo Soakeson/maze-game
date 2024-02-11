@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<SourceFileCollection xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Profile>Reach</Profile>
+  <Platform>DesktopGL</Platform>
+  <Config />
+  <SourceFiles>
+    <File>/Users/skyler/School/GameDev/Maze/Maze/Content/images/wall-0.png</File>
+    <File>/Users/skyler/School/GameDev/Maze/Maze/Content/images/wall-1.png</File>
+    <File>/Users/skyler/School/GameDev/Maze/Maze/Content/images/wall-2.png</File>
+    <File>/Users/skyler/School/GameDev/Maze/Maze/Content/images/wall-3.png</File>
+    <File>/Users/skyler/School/GameDev/Maze/Maze/Content/images/wall-4.png</File>
+    <File>/Users/skyler/School/GameDev/Maze/Maze/Content/images/wall-5.png</File>
+    <File>/Users/skyler/School/GameDev/Maze/Maze/Content/images/wall-6.png</File>
+    <File>/Users/skyler/School/GameDev/Maze/Maze/Content/images/wall-7.png</File>
+    <File>/Users/skyler/School/GameDev/Maze/Maze/Content/images/wall-8.png</File>
+    <File>/Users/skyler/School/GameDev/Maze/Maze/Content/images/wall-9.png</File>
+    <File>/Users/skyler/School/GameDev/Maze/Maze/Content/images/wall-10.png</File>
+    <File>/Users/skyler/School/GameDev/Maze/Maze/Content/images/wall-11.png</File>
+    <File>/Users/skyler/School/GameDev/Maze/Maze/Content/images/wall-12.png</File>
+    <File>/Users/skyler/School/GameDev/Maze/Maze/Content/images/wall-13.png</File>
+    <File>/Users/skyler/School/GameDev/Maze/Maze/Content/images/wall-14.png</File>
+  </SourceFiles>
+  <DestFiles>
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+  </DestFiles>
+</SourceFileCollection>

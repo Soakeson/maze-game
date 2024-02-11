@@ -1,0 +1,14 @@
+{
+  "version": 2,
+  "dgSpecHash": "emiFzYF8rxczC5UGkocDmzYL2tHELklCnRunqfJFCemPFduyebocJ19cI8q9Kb9qiRMdeCpu9lW3U88DDE64yw==",
+  "success": true,
+  "projectFilePath": "/Users/skyler/School/GameDev/Maze/Maze/Maze.csproj",
+  "expectedPackageFiles": [
+    "/Users/skyler/.nuget/packages/monogame.content.builder.task/3.8.1.303/monogame.content.builder.task.3.8.1.303.nupkg.sha512",
+    "/Users/skyler/.nuget/packages/monogame.framework.desktopgl/3.8.1.303/monogame.framework.desktopgl.3.8.1.303.nupkg.sha512",
+    "/Users/skyler/.nuget/packages/microsoft.netcore.app.ref/6.0.26/microsoft.netcore.app.ref.6.0.26.nupkg.sha512",
+    "/Users/skyler/.nuget/packages/microsoft.aspnetcore.app.ref/6.0.26/microsoft.aspnetcore.app.ref.6.0.26.nupkg.sha512",
+    "/Users/skyler/.nuget/packages/microsoft.netcore.app.host.osx-arm64/6.0.26/microsoft.netcore.app.host.osx-arm64.6.0.26.nupkg.sha512"
+  ],
+  "logs": []
+}
