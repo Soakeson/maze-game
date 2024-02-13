@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using CS5410.Input;
 
 namespace CS5410
 {
@@ -9,6 +10,7 @@ namespace CS5410
         private GraphicsDeviceManager m_graphics;
         private SpriteBatch m_spriteBatch;
         private MazeGrid m_mazeGrid;
+        private Player m_player;
         private int m_screenWidth = 1920/2;
         private int m_screenHeight = 1080/2;
         private int m_cellWidth;
@@ -17,13 +19,9 @@ namespace CS5410
         private int m_yOffset;
         private int m_xShift;
         private int m_yShift;
-        private Texture2D[] texturePool = new Texture2D[17];
-        private string[] textureFiles = new string[17] {
-            "wall-0", "wall-1", "wall-2", "wall-3",
-            "wall-4", "wall-5", "wall-6", "wall-7",
-            "wall-8", "wall-9", "wall-10", "wall-11",
-            "wall-12", "wall-13", "wall-14", "wall-15",
-            "player", };
+        private Texture2D[] wallTexturePool = new Texture2D[16];
+        private Texture2D playerTexture;
+        private KeyboardInput m_inputKeyboard;
 
         public Maze()
         {
@@ -34,7 +32,7 @@ namespace CS5410
 
         protected override void Initialize()
         {
-            m_mazeGrid = new MazeGrid(15, 15);
+            m_mazeGrid = new MazeGrid(10, 10);
             m_graphics.PreferredBackBufferWidth = m_screenWidth;
             m_graphics.PreferredBackBufferHeight = m_screenHeight;
 
@@ -51,6 +49,20 @@ namespace CS5410
             // m_yShift = m_screenWidth % 18 == 0 ? (m_screenHeight/18) : (m_screenHeight/18) + (m_cellHeight/2);
             m_xShift = m_screenWidth/4;
             m_yShift = (m_screenHeight/18);
+            m_player = new Player((0, 0));
+
+            m_inputKeyboard = new KeyboardInput();
+
+            m_inputKeyboard.registerCommand(Keys.W, false, new IInputDevice.CommandDelegate(onMoveUp));
+            m_inputKeyboard.registerCommand(Keys.S, false, new IInputDevice.CommandDelegate(onMoveDown));
+            m_inputKeyboard.registerCommand(Keys.A, false, new IInputDevice.CommandDelegate(onMoveLeft));
+            m_inputKeyboard.registerCommand(Keys.D, false, new IInputDevice.CommandDelegate(onMoveRight));
+
+            m_inputKeyboard.registerCommand(Keys.Up, false, new IInputDevice.CommandDelegate(onMoveUp));
+            m_inputKeyboard.registerCommand(Keys.Down, false, new IInputDevice.CommandDelegate(onMoveDown));
+            m_inputKeyboard.registerCommand(Keys.Left, false, new IInputDevice.CommandDelegate(onMoveLeft));
+            m_inputKeyboard.registerCommand(Keys.Right, false, new IInputDevice.CommandDelegate(onMoveRight));
+
             m_graphics.ApplyChanges();
             base.Initialize();
         }
@@ -58,12 +70,11 @@ namespace CS5410
         protected override void LoadContent()
         {
             m_spriteBatch = new SpriteBatch(GraphicsDevice);
-            int i = 0;
-            foreach (string textureFile in textureFiles)
+            for (int i = 0; i < 16; i++)
             {
-              texturePool[i] = this.Content.Load<Texture2D>($"images/{textureFile}");
-              i++;
+              wallTexturePool[i] = this.Content.Load<Texture2D>($"images/wall-{i}");
             }
+            playerTexture = this.Content.Load<Texture2D>("images/player");
         }
 
         protected override void Update(GameTime gameTime)
@@ -73,8 +84,8 @@ namespace CS5410
                 Exit();
             }
 
+            m_inputKeyboard.Update(gameTime);
             // TODO: Add your update logic here
-
             base.Update(gameTime);
         }
 
@@ -88,7 +99,7 @@ namespace CS5410
             for (int x = 0; x < m_mazeGrid.Width; x++)
             {
               Cell curr = m_mazeGrid.Grid[(x,y)];
-              m_spriteBatch.Draw(texturePool[(int)curr.Passage], new Rectangle( 
+              m_spriteBatch.Draw(wallTexturePool[(int)curr.Passage], new Rectangle( 
                   x: x == 0 ? (x*m_cellWidth) + m_xShift : (x*m_cellWidth - x*m_xOffset) + m_xShift,
                   y: y == 0 ? (y*m_cellHeight) + m_yShift : (y*m_cellHeight - y*m_yOffset) + m_yShift,
                   width:m_cellWidth,
@@ -98,14 +109,35 @@ namespace CS5410
           }
 
           // player rendering
-          m_spriteBatch.Draw(texturePool[16], new Rectangle( 
-              x:0 + m_xShift, 
-              y:0 + m_yShift,
+          m_spriteBatch.Draw(playerTexture, new Rectangle( 
+              x: m_player.getX() == 0 ? (m_player.getX()*m_cellWidth) + m_xShift : (m_player.getX()*m_cellWidth - m_player.getX()*m_xOffset) + m_xShift,
+              y: m_player.getY() == 0 ? (m_player.getY()*m_cellWidth) + m_yShift : (m_player.getY()*m_cellWidth - m_player.getY()*m_yOffset) + m_yShift,
               width:m_cellWidth,
               height:m_cellHeight),
-            Color.Orange);
+            Color.Red);
           m_spriteBatch.End();
           base.Draw(gameTime);
+        }
+
+
+        private void onMoveUp(GameTime gameTime, float value)
+        {
+          m_player.updatePosition(m_mazeGrid.move(m_player.getCord(), Direction.North));
+        }
+
+        private void onMoveDown(GameTime gameTime, float value)
+        {
+          m_player.updatePosition(m_mazeGrid.move(m_player.getCord(), Direction.South));
+        }
+
+        private void onMoveLeft(GameTime gameTime, float value)
+        {
+          m_player.updatePosition(m_mazeGrid.move(m_player.getCord(), Direction.West));
+        }
+
+        private void onMoveRight(GameTime gameTime, float value)
+        {
+          m_player.updatePosition(m_mazeGrid.move(m_player.getCord(), Direction.East));
         }
     }
 }
