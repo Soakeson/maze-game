@@ -201,5 +201,17 @@
 #/processerParam:MakeSquare=False
 #/processerParam:TextureFormat=Color
 /build:images/wall-14.png
+
+#begin images/wall-15.png
+/importer:TextureImporter
+/processor:TextureProcessor
+#/processerParam:ColorKeyColor=255,0,255,255
+#/processerParam:ColorKeyEnabled=True
+#/processerParam:GenerateMipmaps=False
+#/processerParam:PremultiplyAlpha=True
+#/processerParam:ResizeToPowerOfTwo=False
+#/processerParam:MakeSquare=False
+#/processerParam:TextureFormat=Color
+/build:images/wall-15.png
 #---------------------------------- Content ---------------------------------#
 

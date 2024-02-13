@@ -1,11 +1,11 @@
 public class Cell 
 {
-  public (int x, int y) cord {get;}
-  public Direction passage {get; set;}
+  public (int x, int y) Cord {get;}
+  public Direction Passage {get; set;}
 
   public Cell((int x, int y) cord) 
   {
-    this.cord = cord;
-    this.passage = 0;
+    this.Cord = Cord;
+    this.Passage = 0;
   }
 }

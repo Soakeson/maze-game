@@ -3,16 +3,16 @@ using System.Collections.Generic;
 
 public class MazeGrid 
 {
-  public int m_height;
-  public int m_width;
-  public Dictionary<(int x, int y), Cell> m_grid;
+  public int Height;
+  public int Width;
+  public Dictionary<(int x, int y), Cell> Grid;
   private readonly (int x, int y) NORTHOFFSET = (0, -1), SOUTHOFFSET = (0, 1), WESTOFFSET = (-1, 0), EASTOFFSET = (1, 0);
 
   public MazeGrid(int height, int width)
   {
-    this.m_height = height;
-    this.m_width = width;
-    this.m_grid = new Dictionary<(int x, int y), Cell>();
+    this.Height = height;
+    this.Width = width;
+    this.Grid = new Dictionary<(int x, int y), Cell>();
     generate();
   }
 
@@ -20,9 +20,9 @@ public class MazeGrid
   {
     Random rnd = new Random();
     Dictionary<(int x, int y), Cell> cells = new Dictionary<(int x, int y), Cell>();
-    for (int y = 0; y < m_height; y++)
+    for (int y = 0; y < Height; y++)
     {
-      for (int x = 0; x < m_width; x++)
+      for (int x = 0; x < Width; x++)
       {
         cells.Add((x, y), new Cell((x, y)));
       }
@@ -30,37 +30,37 @@ public class MazeGrid
 
     List<((int x, int y) from, (int x, int y) to, Direction dir)> walls = new List<((int x, int y) from, (int x, int y) to, Direction dir)>();
     Cell start = cells[(0,0)];
-    m_grid.Add(start.cord, start);
-    walls.Add((start.cord, addCord(NORTHOFFSET, start.cord), Direction.North));
-    walls.Add((start.cord, addCord(SOUTHOFFSET, start.cord), Direction.South));
-    walls.Add((start.cord, addCord(EASTOFFSET, start.cord), Direction.East));
-    walls.Add((start.cord, addCord(WESTOFFSET, start.cord), Direction.West));
+    Grid.Add(start.Cord, start);
+    walls.Add((start.Cord, addCord(NORTHOFFSET, start.Cord), Direction.North));
+    walls.Add((start.Cord, addCord(SOUTHOFFSET, start.Cord), Direction.South));
+    walls.Add((start.Cord, addCord(EASTOFFSET, start.Cord), Direction.East));
+    walls.Add((start.Cord, addCord(WESTOFFSET, start.Cord), Direction.West));
     do {
       int rand = rnd.Next(0, walls.Count);
       var currWall = walls[rand];
       walls.RemoveAt(rand);
-      if (cells.ContainsKey(currWall.to) && !m_grid.ContainsKey(currWall.to) && m_grid.ContainsKey(currWall.from))
+      if (cells.ContainsKey(currWall.to) && !Grid.ContainsKey(currWall.to) && Grid.ContainsKey(currWall.from))
       {
-        m_grid.Add(currWall.to, cells[currWall.to]);
-        Cell from = m_grid[currWall.from];
-        Cell to = m_grid[currWall.to];
+        Grid.Add(currWall.to, cells[currWall.to]);
+        Cell from = Grid[currWall.from];
+        Cell to = Grid[currWall.to];
         switch (currWall.dir)
         {
           case Direction.North:
-            from.passage = from.passage | Direction.North;
-            to.passage = to.passage | Direction.South;
+            from.Passage = from.Passage | Direction.North;
+            to.Passage = to.Passage | Direction.South;
             break;
           case Direction.South:
-            from.passage = from.passage | Direction.South;
-            to.passage = to.passage | Direction.North;
+            from.Passage = from.Passage | Direction.South;
+            to.Passage = to.Passage | Direction.North;
             break;
           case Direction.East:
-            from.passage = from.passage | Direction.East;
-            to.passage = to.passage | Direction.West;
+            from.Passage = from.Passage | Direction.East;
+            to.Passage = to.Passage | Direction.West;
             break;
           case Direction.West:
-            from.passage = from.passage | Direction.West;
-            to.passage = to.passage | Direction.East;
+            from.Passage = from.Passage | Direction.West;
+            to.Passage = to.Passage | Direction.East;
             break;
         }
         walls.Add((currWall.to, addCord(NORTHOFFSET, currWall.to), Direction.North));
@@ -73,15 +73,15 @@ public class MazeGrid
 
   public void print()
   {
-    for (int y = 0; y < m_height; y++)
+    for (int y = 0; y < Height; y++)
     {
-      for (int x = 0; x < m_width; x++)
+      for (int x = 0; x < Width; x++)
       {
-        Cell cell = m_grid[(x,y)];
-        if (cell.passage.HasFlag(Direction.North)) Console.Write("N");
-        if (cell.passage.HasFlag(Direction.South)) Console.Write("S");
-        if (cell.passage.HasFlag(Direction.West)) Console.Write("W");
-        if (cell.passage.HasFlag(Direction.East)) Console.Write("E");
+        Cell cell = Grid[(x,y)];
+        if (cell.Passage.HasFlag(Direction.North)) Console.Write("N");
+        if (cell.Passage.HasFlag(Direction.South)) Console.Write("S");
+        if (cell.Passage.HasFlag(Direction.West)) Console.Write("W");
+        if (cell.Passage.HasFlag(Direction.East)) Console.Write("E");
         Console.Write(" ");
       }
       Console.WriteLine();

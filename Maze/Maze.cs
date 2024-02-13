@@ -6,45 +6,51 @@ namespace CS5410
 {
     public class Maze : Game
     {
-        Texture2D whiteRectangle;
         private GraphicsDeviceManager m_graphics;
         private SpriteBatch m_spriteBatch;
-        private MazeGrid m_grid;
-        private int m_screenHeight;
-        private int m_screenWidth;
-
-        private Texture2D m_wall0;
-        private Texture2D m_wall1;
-        private Texture2D m_wall2;
-        private Texture2D m_wall3;
-        private Texture2D m_wall4;
-        private Texture2D m_wall5;
-        private Texture2D m_wall6;
-        private Texture2D m_wall7;
-        private Texture2D m_wall8;
-        private Texture2D m_wall9;
-        private Texture2D m_wall10;
-        private Texture2D m_wall11;
-        private Texture2D m_wall12;
-        private Texture2D m_wall13;
-        private Texture2D m_wall14;
+        private MazeGrid m_mazeGrid;
+        private int m_screenWidth = 1920/2;
+        private int m_screenHeight = 1080/2;
+        private int m_cellWidth;
+        private int m_cellHeight;
+        private int m_xOffset;
+        private int m_yOffset;
+        private int m_xShift;
+        private int m_yShift;
+        private Texture2D[] texturePool = new Texture2D[17];
+        private string[] textureFiles = new string[17] {
+            "wall-0", "wall-1", "wall-2", "wall-3",
+            "wall-4", "wall-5", "wall-6", "wall-7",
+            "wall-8", "wall-9", "wall-10", "wall-11",
+            "wall-12", "wall-13", "wall-14", "wall-15",
+            "player", };
 
         public Maze()
         {
             m_graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
             IsMouseVisible = true;
-            m_screenHeight = m_graphics.PreferredBackBufferHeight;
-            m_screenWidth = m_graphics.PreferredBackBufferWidth;
         }
 
         protected override void Initialize()
         {
-            // TODO: Add your initialization logic here
-            m_grid = new MazeGrid(20, 20);
-            m_grid.print();
-            m_graphics.PreferredBackBufferWidth = 1920;
-            m_graphics.PreferredBackBufferHeight = 1080;
+            m_mazeGrid = new MazeGrid(15, 15);
+            m_graphics.PreferredBackBufferWidth = m_screenWidth;
+            m_graphics.PreferredBackBufferHeight = m_screenHeight;
+
+            // place cells
+            m_cellWidth = m_screenHeight/m_mazeGrid.Width;
+            m_cellHeight = m_screenHeight/m_mazeGrid.Height;
+
+            // texture alignment
+            m_xOffset = m_cellWidth/9;
+            m_yOffset = m_cellHeight/9;
+
+            // centering
+            // m_xShift = m_screenWidth % 4 == 0 ? (m_screenWidth/4) : (m_screenWidth/4) - (m_cellWidth/2);
+            // m_yShift = m_screenWidth % 18 == 0 ? (m_screenHeight/18) : (m_screenHeight/18) + (m_cellHeight/2);
+            m_xShift = m_screenWidth/4;
+            m_yShift = (m_screenHeight/18);
             m_graphics.ApplyChanges();
             base.Initialize();
         }
@@ -52,23 +58,12 @@ namespace CS5410
         protected override void LoadContent()
         {
             m_spriteBatch = new SpriteBatch(GraphicsDevice);
-            m_wall0 = this.Content.Load<Texture2D>("images/wall-0");
-            m_wall1 = this.Content.Load<Texture2D>("images/wall-1");
-            m_wall2 = this.Content.Load<Texture2D>("images/wall-2");
-            m_wall3 = this.Content.Load<Texture2D>("images/wall-3");
-            m_wall4 = this.Content.Load<Texture2D>("images/wall-4");
-            m_wall5 = this.Content.Load<Texture2D>("images/wall-5");
-            m_wall6 = this.Content.Load<Texture2D>("images/wall-6");
-            m_wall7 = this.Content.Load<Texture2D>("images/wall-7");
-            m_wall8 = this.Content.Load<Texture2D>("images/wall-8");
-            m_wall9 = this.Content.Load<Texture2D>("images/wall-9");
-            m_wall10 = this.Content.Load<Texture2D>("images/wall-10");
-            m_wall11 = this.Content.Load<Texture2D>("images/wall-11");
-            m_wall12 = this.Content.Load<Texture2D>("images/wall-12");
-            m_wall13 = this.Content.Load<Texture2D>("images/wall-13");
-            m_wall14 = this.Content.Load<Texture2D>("images/wall-14");
-
-            // TODO: use this.Content to load your game content here
+            int i = 0;
+            foreach (string textureFile in textureFiles)
+            {
+              texturePool[i] = this.Content.Load<Texture2D>($"images/{textureFile}");
+              i++;
+            }
         }
 
         protected override void Update(GameTime gameTime)
@@ -85,135 +80,32 @@ namespace CS5410
 
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.Black);
-            // TODO: Add your drawing code here
-            int cellWidth = m_screenHeight/m_grid.m_width;
-            int cellHeight = m_screenHeight/m_grid.m_height;
-            for (int y = 0; y < m_grid.m_height; y++)
+          GraphicsDevice.Clear(Color.Black);
+          // maze rendering
+          m_spriteBatch.Begin(SpriteSortMode.Deferred, samplerState:SamplerState.PointClamp);
+          for (int y = 0; y < m_mazeGrid.Height; y++)
+          {
+            for (int x = 0; x < m_mazeGrid.Width; x++)
             {
-              for (int x = 0; x < m_grid.m_width; x++)
-              {
-                Cell curr = m_grid.m_grid[(x,y)];
-                m_spriteBatch.Begin(SpriteSortMode.Deferred);
-                switch(((int)curr.passage))
-                {
-                  case 1:
-                  m_spriteBatch.Draw(m_wall1, new Rectangle( 
-                        x:x*cellWidth, 
-                        y:y*cellHeight,
-                        width:cellWidth,
-                        height:cellHeight),
-                      Color.White);
-                  break;
-                  case 2:
-                  m_spriteBatch.Draw(m_wall2, new Rectangle( 
-                        x:x*cellWidth, 
-                        y:y*cellHeight,
-                        width:cellWidth,
-                        height:cellHeight),
-                      Color.White);
-                  break;
-                  case 3:
-                  m_spriteBatch.Draw(m_wall3, new Rectangle( 
-                        x:x*cellWidth, 
-                        y:y*cellHeight,
-                        width:cellWidth,
-                        height:cellHeight),
-                      Color.White);
-                  break;
-                  case 4:
-                  m_spriteBatch.Draw(m_wall4, new Rectangle( 
-                        x:x*cellWidth, 
-                        y:y*cellHeight,
-                        width:cellWidth,
-                        height:cellHeight),
-                      Color.White);
-                  break;
-                  case 5:
-                  m_spriteBatch.Draw(m_wall5, new Rectangle( 
-                        x:x*cellWidth, 
-                        y:y*cellHeight,
-                        width:cellWidth,
-                        height:cellHeight),
-                      Color.White);
-                  break;
-                  case 6:
-                  m_spriteBatch.Draw(m_wall6, new Rectangle( 
-                        x:x*cellWidth, 
-                        y:y*cellHeight,
-                        width:cellWidth,
-                        height:cellHeight),
-                      Color.White);
-                  break;
-                  case 7:
-                  m_spriteBatch.Draw(m_wall7, new Rectangle( 
-                        x:x*cellWidth, 
-                        y:y*cellHeight,
-                        width:cellWidth,
-                        height:cellHeight),
-                      Color.White);
-                  break;
-                  case 8:
-                  m_spriteBatch.Draw(m_wall8, new Rectangle( 
-                        x:x*cellWidth, 
-                        y:y*cellHeight,
-                        width:cellWidth,
-                        height:cellHeight),
-                      Color.White);
-                  break;
-                  case 9:
-                  m_spriteBatch.Draw(m_wall9, new Rectangle( 
-                        x:x*cellWidth, 
-                        y:y*cellHeight,
-                        width:cellWidth,
-                        height:cellHeight),
-                      Color.White);
-                  break;
-                  case 10:
-                  m_spriteBatch.Draw(m_wall10, new Rectangle( 
-                        x:x*cellWidth, 
-                        y:y*cellHeight,
-                        width:cellWidth,
-                        height:cellHeight),
-                      Color.White);
-                  break;
-                  case 11:
-                  m_spriteBatch.Draw(m_wall11, new Rectangle( 
-                        x:x*cellWidth, 
-                        y:y*cellHeight,
-                        width:cellWidth,
-                        height:cellHeight),
-                      Color.White);
-                  break;
-                  case 12:
-                  m_spriteBatch.Draw(m_wall12, new Rectangle( 
-                        x:x*cellWidth, 
-                        y:y*cellHeight,
-                        width:cellWidth,
-                        height:cellHeight),
-                      Color.White);
-                  break;
-                  case 13:
-                  m_spriteBatch.Draw(m_wall13, new Rectangle( 
-                        x:x*cellWidth, 
-                        y:y*cellHeight,
-                        width:cellWidth,
-                        height:cellHeight),
-                      Color.White);
-                  break;
-                  case 14:
-                  m_spriteBatch.Draw(m_wall14, new Rectangle( 
-                        x:x*cellWidth, 
-                        y:y*cellHeight,
-                        width:cellWidth,
-                        height:cellHeight),
-                      Color.White);
-                  break;
-                }
-                m_spriteBatch.End();
-              }
+              Cell curr = m_mazeGrid.Grid[(x,y)];
+              m_spriteBatch.Draw(texturePool[(int)curr.Passage], new Rectangle( 
+                  x: x == 0 ? (x*m_cellWidth) + m_xShift : (x*m_cellWidth - x*m_xOffset) + m_xShift,
+                  y: y == 0 ? (y*m_cellHeight) + m_yShift : (y*m_cellHeight - y*m_yOffset) + m_yShift,
+                  width:m_cellWidth,
+                  height:m_cellHeight),
+                Color.White);
             }
-            base.Draw(gameTime);
+          }
+
+          // player rendering
+          m_spriteBatch.Draw(texturePool[16], new Rectangle( 
+              x:0 + m_xShift, 
+              y:0 + m_yShift,
+              width:m_cellWidth,
+              height:m_cellHeight),
+            Color.Orange);
+          m_spriteBatch.End();
+          base.Draw(gameTime);
         }
     }
 }

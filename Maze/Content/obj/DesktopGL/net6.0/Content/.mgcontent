@@ -4,6 +4,7 @@
   <Platform>DesktopGL</Platform>
   <Config />
   <SourceFiles>
+    <File>/Users/skyler/School/GameDev/Maze/Maze/Content/images/player.png</File>
     <File>/Users/skyler/School/GameDev/Maze/Maze/Content/images/wall-0.png</File>
     <File>/Users/skyler/School/GameDev/Maze/Maze/Content/images/wall-1.png</File>
     <File>/Users/skyler/School/GameDev/Maze/Maze/Content/images/wall-2.png</File>
@@ -19,8 +20,11 @@
     <File>/Users/skyler/School/GameDev/Maze/Maze/Content/images/wall-12.png</File>
     <File>/Users/skyler/School/GameDev/Maze/Maze/Content/images/wall-13.png</File>
     <File>/Users/skyler/School/GameDev/Maze/Maze/Content/images/wall-14.png</File>
+    <File>/Users/skyler/School/GameDev/Maze/Maze/Content/images/wall-15.png</File>
   </SourceFiles>
   <DestFiles>
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
     <File xsi:nil="true" />
     <File xsi:nil="true" />
     <File xsi:nil="true" />
