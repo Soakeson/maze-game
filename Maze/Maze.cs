@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using CS5410.Input;
+using System;
 
 namespace CS5410
 {
@@ -9,7 +10,8 @@ namespace CS5410
     {
         private GraphicsDeviceManager m_graphics;
         private SpriteBatch m_spriteBatch;
-        private MazeGrid m_mazeGrid;
+        private MazeLevelGenerator m_mazeGenerator;
+        private MazeLevel m_level;
         private Player m_player;
         private int m_screenWidth = 1920/2;
         private int m_screenHeight = 1080/2;
@@ -32,13 +34,15 @@ namespace CS5410
 
         protected override void Initialize()
         {
-            m_mazeGrid = new MazeGrid(10, 10);
+            m_mazeGenerator = new MazeLevelGenerator();
+            m_level = m_mazeGenerator.Generate(10, 10);
+
             m_graphics.PreferredBackBufferWidth = m_screenWidth;
             m_graphics.PreferredBackBufferHeight = m_screenHeight;
 
             // place cells
-            m_cellWidth = m_screenHeight/m_mazeGrid.Width;
-            m_cellHeight = m_screenHeight/m_mazeGrid.Height;
+            m_cellWidth = m_screenHeight/m_level.Width;
+            m_cellHeight = m_screenHeight/m_level.Height;
 
             // texture alignment
             m_xOffset = m_cellWidth/9;
@@ -53,16 +57,16 @@ namespace CS5410
 
             m_inputKeyboard = new KeyboardInput();
 
-            m_inputKeyboard.registerCommand(Keys.W, false, new IInputDevice.CommandDelegate(onMoveUp));
-            m_inputKeyboard.registerCommand(Keys.S, false, new IInputDevice.CommandDelegate(onMoveDown));
-            m_inputKeyboard.registerCommand(Keys.A, false, new IInputDevice.CommandDelegate(onMoveLeft));
-            m_inputKeyboard.registerCommand(Keys.D, false, new IInputDevice.CommandDelegate(onMoveRight));
-
-            m_inputKeyboard.registerCommand(Keys.Up, false, new IInputDevice.CommandDelegate(onMoveUp));
-            m_inputKeyboard.registerCommand(Keys.Down, false, new IInputDevice.CommandDelegate(onMoveDown));
-            m_inputKeyboard.registerCommand(Keys.Left, false, new IInputDevice.CommandDelegate(onMoveLeft));
-            m_inputKeyboard.registerCommand(Keys.Right, false, new IInputDevice.CommandDelegate(onMoveRight));
-
+            // m_inputKeyboard.registerCommand(Keys.W, false, new IInputDevice.CommandDelegate(onMoveUp));
+            // m_inputKeyboard.registerCommand(Keys.S, false, new IInputDevice.CommandDelegate(onMoveDown));
+            // m_inputKeyboard.registerCommand(Keys.A, false, new IInputDevice.CommandDelegate(onMoveLeft));
+            // m_inputKeyboard.registerCommand(Keys.D, false, new IInputDevice.CommandDelegate(onMoveRight));
+            //
+            // m_inputKeyboard.registerCommand(Keys.Up, false, new IInputDevice.CommandDelegate(onMoveUp));
+            // m_inputKeyboard.registerCommand(Keys.Down, false, new IInputDevice.CommandDelegate(onMoveDown));
+            // m_inputKeyboard.registerCommand(Keys.Left, false, new IInputDevice.CommandDelegate(onMoveLeft));
+            // m_inputKeyboard.registerCommand(Keys.Right, false, new IInputDevice.CommandDelegate(onMoveRight));
+            //
             m_graphics.ApplyChanges();
             base.Initialize();
         }
@@ -94,11 +98,11 @@ namespace CS5410
           GraphicsDevice.Clear(Color.Black);
           // maze rendering
           m_spriteBatch.Begin(SpriteSortMode.Deferred, samplerState:SamplerState.PointClamp);
-          for (int y = 0; y < m_mazeGrid.Height; y++)
+          for (int y = 0; y < m_level.Height; y++)
           {
-            for (int x = 0; x < m_mazeGrid.Width; x++)
+            for (int x = 0; x < m_level.Width; x++)
             {
-              Cell curr = m_mazeGrid.Grid[(x,y)];
+              Cell curr = m_level.getCell(x, y);
               m_spriteBatch.Draw(wallTexturePool[(int)curr.Passage], new Rectangle( 
                   x: x == 0 ? (x*m_cellWidth) + m_xShift : (x*m_cellWidth - x*m_xOffset) + m_xShift,
                   y: y == 0 ? (y*m_cellHeight) + m_yShift : (y*m_cellHeight - y*m_yOffset) + m_yShift,
@@ -118,26 +122,25 @@ namespace CS5410
           m_spriteBatch.End();
           base.Draw(gameTime);
         }
-
-
-        private void onMoveUp(GameTime gameTime, float value)
-        {
-          m_player.updatePosition(m_mazeGrid.move(m_player.getCord(), Direction.North));
-        }
-
-        private void onMoveDown(GameTime gameTime, float value)
-        {
-          m_player.updatePosition(m_mazeGrid.move(m_player.getCord(), Direction.South));
-        }
-
-        private void onMoveLeft(GameTime gameTime, float value)
-        {
-          m_player.updatePosition(m_mazeGrid.move(m_player.getCord(), Direction.West));
-        }
-
-        private void onMoveRight(GameTime gameTime, float value)
-        {
-          m_player.updatePosition(m_mazeGrid.move(m_player.getCord(), Direction.East));
-        }
+        //
+        // private void onMoveUp(GameTime gameTime, float value)
+        // {
+        //   m_player.updatePosition(m_mazeGrid.move(m_player.getCord(), Direction.North));
+        // }
+        //
+        // private void onMoveDown(GameTime gameTime, float value)
+        // {
+        //   m_player.updatePosition(m_mazeGrid.move(m_player.getCord(), Direction.South));
+        // }
+        //
+        // private void onMoveLeft(GameTime gameTime, float value)
+        // {
+        //   m_player.updatePosition(m_mazeGrid.move(m_player.getCord(), Direction.West));
+        // }
+        //
+        // private void onMoveRight(GameTime gameTime, float value)
+        // {
+        //   m_player.updatePosition(m_mazeGrid.move(m_player.getCord(), Direction.East));
+        // }
     }
 }

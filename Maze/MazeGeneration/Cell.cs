@@ -5,7 +5,7 @@ public class Cell
 
   public Cell((int x, int y) cord) 
   {
-    this.Cord = Cord;
+    this.Cord = cord;
     this.Passage = 0;
   }
 }
