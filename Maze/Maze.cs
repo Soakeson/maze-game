@@ -32,14 +32,8 @@ namespace CS5410
             IsMouseVisible = true;
         }
 
-        protected override void Initialize()
+        private void CalculateLevelScreenSizing()
         {
-            m_mazeGenerator = new MazeLevelGenerator();
-            m_level = m_mazeGenerator.Generate(10, 10);
-
-            m_graphics.PreferredBackBufferWidth = m_screenWidth;
-            m_graphics.PreferredBackBufferHeight = m_screenHeight;
-
             // place cells
             m_cellWidth = m_screenHeight/m_level.Width;
             m_cellHeight = m_screenHeight/m_level.Height;
@@ -53,6 +47,17 @@ namespace CS5410
             // m_yShift = m_screenWidth % 18 == 0 ? (m_screenHeight/18) : (m_screenHeight/18) + (m_cellHeight/2);
             m_xShift = m_screenWidth/4;
             m_yShift = (m_screenHeight/18);
+        }
+
+        protected override void Initialize()
+        {
+            m_mazeGenerator = new MazeLevelGenerator();
+            m_level = m_mazeGenerator.Generate(3, 3);
+
+            m_graphics.PreferredBackBufferWidth = m_screenWidth;
+            m_graphics.PreferredBackBufferHeight = m_screenHeight;
+
+            CalculateLevelScreenSizing();
             m_player = new Player((0, 0));
 
             m_inputKeyboard = new KeyboardInput();
@@ -67,6 +72,10 @@ namespace CS5410
             // m_inputKeyboard.registerCommand(Keys.Left, false, new IInputDevice.CommandDelegate(onMoveLeft));
             // m_inputKeyboard.registerCommand(Keys.Right, false, new IInputDevice.CommandDelegate(onMoveRight));
             //
+            m_inputKeyboard.registerCommand(Keys.F1, false, new IInputDevice.CommandDelegate(onFive));
+            m_inputKeyboard.registerCommand(Keys.F2, false, new IInputDevice.CommandDelegate(onTen));
+            m_inputKeyboard.registerCommand(Keys.F3, false, new IInputDevice.CommandDelegate(onFifteen));
+            m_inputKeyboard.registerCommand(Keys.F4, false, new IInputDevice.CommandDelegate(onTwenty));
             m_graphics.ApplyChanges();
             base.Initialize();
         }
@@ -102,7 +111,7 @@ namespace CS5410
           {
             for (int x = 0; x < m_level.Width; x++)
             {
-              Cell curr = m_level.getCell(x, y);
+              Cell curr = m_level.GetCell(x, y);
               m_spriteBatch.Draw(wallTexturePool[(int)curr.Passage], new Rectangle( 
                   x: x == 0 ? (x*m_cellWidth) + m_xShift : (x*m_cellWidth - x*m_xOffset) + m_xShift,
                   y: y == 0 ? (y*m_cellHeight) + m_yShift : (y*m_cellHeight - y*m_yOffset) + m_yShift,
@@ -142,5 +151,28 @@ namespace CS5410
         // {
         //   m_player.updatePosition(m_mazeGrid.move(m_player.getCord(), Direction.East));
         // }
+        private void onFive(GameTime gameTime, float value)
+        {
+          m_level = m_mazeGenerator.Generate(5, 5);
+          CalculateLevelScreenSizing();
+        }
+
+        private void onTen(GameTime gameTime, float value)
+        {
+          m_level = m_mazeGenerator.Generate(10, 10);
+          CalculateLevelScreenSizing();
+        }
+
+        private void onFifteen(GameTime gameTime, float value)
+        {
+          m_level = m_mazeGenerator.Generate(15, 15);
+          CalculateLevelScreenSizing();
+        }
+
+        private void onTwenty(GameTime gameTime, float value)
+        {
+          m_level = m_mazeGenerator.Generate(20, 20);
+          CalculateLevelScreenSizing();
+        }
     }
 }

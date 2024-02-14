@@ -3,8 +3,6 @@ public class Player
   (int x, int y) Cord;
   int Score = 0;
 
-  public delegate void Move(Direction dir);
-
   public Player((int x, int y) pos)
   {
     Cord = pos;
