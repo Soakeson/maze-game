@@ -1,30 +1,11 @@
 public class Player
 {
-  (int x, int y) Cord;
-  int Score = 0;
+  public Cell Pos {get; set;}
+  public int Score {get; set;}
 
-  public Player((int x, int y) pos)
+  public Player(Cell start)
   {
-    Cord = pos;
-  }
-
-  public void updatePosition((int x, int y) pos)
-  {
-    Cord = pos;
-  }
-
-  public (int x, int y) getCord()
-  {
-    return Cord;
-  }
-
-  public int getY()
-  {
-    return Cord.y;
-  }
-
-  public int getX()
-  {
-    return Cord.x;
+    Pos = start;
+    Score = 0;
   }
 }

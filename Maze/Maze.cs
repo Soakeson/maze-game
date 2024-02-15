@@ -12,7 +12,6 @@ namespace CS5410
         private SpriteBatch m_spriteBatch;
         private MazeLevelGenerator m_mazeGenerator;
         private MazeLevel m_level;
-        private Player m_player;
         private int m_screenWidth = 1920/2;
         private int m_screenHeight = 1080/2;
         private int m_cellWidth;
@@ -21,8 +20,13 @@ namespace CS5410
         private int m_yOffset;
         private int m_xShift;
         private int m_yShift;
+        private bool m_showPath = false;
+        private bool m_showHint = false;
         private Texture2D[] wallTexturePool = new Texture2D[16];
         private Texture2D playerTexture;
+        private Texture2D startTexture;
+        private Texture2D trailTexture;
+        private Texture2D goalTexture;
         private KeyboardInput m_inputKeyboard;
 
         public Maze()
@@ -58,24 +62,25 @@ namespace CS5410
             m_graphics.PreferredBackBufferHeight = m_screenHeight;
 
             CalculateLevelScreenSizing();
-            m_player = new Player((0, 0));
 
             m_inputKeyboard = new KeyboardInput();
 
-            // m_inputKeyboard.registerCommand(Keys.W, false, new IInputDevice.CommandDelegate(onMoveUp));
-            // m_inputKeyboard.registerCommand(Keys.S, false, new IInputDevice.CommandDelegate(onMoveDown));
-            // m_inputKeyboard.registerCommand(Keys.A, false, new IInputDevice.CommandDelegate(onMoveLeft));
-            // m_inputKeyboard.registerCommand(Keys.D, false, new IInputDevice.CommandDelegate(onMoveRight));
-            //
-            // m_inputKeyboard.registerCommand(Keys.Up, false, new IInputDevice.CommandDelegate(onMoveUp));
-            // m_inputKeyboard.registerCommand(Keys.Down, false, new IInputDevice.CommandDelegate(onMoveDown));
-            // m_inputKeyboard.registerCommand(Keys.Left, false, new IInputDevice.CommandDelegate(onMoveLeft));
-            // m_inputKeyboard.registerCommand(Keys.Right, false, new IInputDevice.CommandDelegate(onMoveRight));
-            //
-            m_inputKeyboard.registerCommand(Keys.F1, false, new IInputDevice.CommandDelegate(onFive));
-            m_inputKeyboard.registerCommand(Keys.F2, false, new IInputDevice.CommandDelegate(onTen));
-            m_inputKeyboard.registerCommand(Keys.F3, false, new IInputDevice.CommandDelegate(onFifteen));
-            m_inputKeyboard.registerCommand(Keys.F4, false, new IInputDevice.CommandDelegate(onTwenty));
+            m_inputKeyboard.registerCommand(Keys.W, true, new IInputDevice.CommandDelegate(onMoveUp));
+            m_inputKeyboard.registerCommand(Keys.S, true, new IInputDevice.CommandDelegate(onMoveDown));
+            m_inputKeyboard.registerCommand(Keys.A, true, new IInputDevice.CommandDelegate(onMoveLeft));
+            m_inputKeyboard.registerCommand(Keys.D, true, new IInputDevice.CommandDelegate(onMoveRight));
+
+            m_inputKeyboard.registerCommand(Keys.Up, true, new IInputDevice.CommandDelegate(onMoveUp));
+            m_inputKeyboard.registerCommand(Keys.Down, true, new IInputDevice.CommandDelegate(onMoveDown));
+            m_inputKeyboard.registerCommand(Keys.Left, true, new IInputDevice.CommandDelegate(onMoveLeft));
+            m_inputKeyboard.registerCommand(Keys.Right, true, new IInputDevice.CommandDelegate(onMoveRight));
+
+            m_inputKeyboard.registerCommand(Keys.F1, true, new IInputDevice.CommandDelegate(onFive));
+            m_inputKeyboard.registerCommand(Keys.F2, true, new IInputDevice.CommandDelegate(onTen));
+            m_inputKeyboard.registerCommand(Keys.F3, true, new IInputDevice.CommandDelegate(onFifteen));
+            m_inputKeyboard.registerCommand(Keys.F4, true, new IInputDevice.CommandDelegate(onTwenty));
+            m_inputKeyboard.registerCommand(Keys.H, true, new IInputDevice.CommandDelegate(onHint));
+            m_inputKeyboard.registerCommand(Keys.P, true, new IInputDevice.CommandDelegate(onPath));
             m_graphics.ApplyChanges();
             base.Initialize();
         }
@@ -88,6 +93,9 @@ namespace CS5410
               wallTexturePool[i] = this.Content.Load<Texture2D>($"images/wall-{i}");
             }
             playerTexture = this.Content.Load<Texture2D>("images/player");
+            trailTexture = this.Content.Load<Texture2D>("images/trail");
+            goalTexture = this.Content.Load<Texture2D>("images/goal");
+            startTexture = this.Content.Load<Texture2D>("images/start");
         }
 
         protected override void Update(GameTime gameTime)
@@ -121,36 +129,59 @@ namespace CS5410
             }
           }
 
+          if (m_showPath)
+          {
+            foreach(Cell trail in m_level.Path)
+            {
+              m_spriteBatch.Draw(trailTexture, new Rectangle( 
+                    x: trail.Cord.x == 0 ? (trail.Cord.x*m_cellWidth) + m_xShift : (trail.Cord.x*m_cellWidth - trail.Cord.x*m_xOffset) + m_xShift,
+                    y: trail.Cord.y == 0 ? (trail.Cord.y*m_cellWidth) + m_yShift : (trail.Cord.y*m_cellWidth - trail.Cord.y*m_yOffset) + m_yShift,
+                    width:m_cellWidth,
+                    height:m_cellHeight),
+                  Color.White);
+            }
+          }
+
+          // goal rendering
+          m_spriteBatch.Draw(goalTexture, new Rectangle( 
+              x: ((m_level.Width - 1)*m_cellWidth - (m_level.Width - 1)*m_xOffset) + m_xShift,
+              y: ((m_level.Height - 1)*m_cellWidth - (m_level.Height - 1)*m_yOffset) + m_yShift,
+              width:m_cellWidth,
+              height:m_cellHeight),
+            Color.White);
+
           // player rendering
           m_spriteBatch.Draw(playerTexture, new Rectangle( 
-              x: m_player.getX() == 0 ? (m_player.getX()*m_cellWidth) + m_xShift : (m_player.getX()*m_cellWidth - m_player.getX()*m_xOffset) + m_xShift,
-              y: m_player.getY() == 0 ? (m_player.getY()*m_cellWidth) + m_yShift : (m_player.getY()*m_cellWidth - m_player.getY()*m_yOffset) + m_yShift,
+              x: m_level.Player.Pos.Cord.x == 0 ? (m_level.Player.Pos.Cord.x*m_cellWidth) + m_xShift : (m_level.Player.Pos.Cord.x*m_cellWidth - m_level.Player.Pos.Cord.x*m_xOffset) + m_xShift,
+              y: m_level.Player.Pos.Cord.y == 0 ? (m_level.Player.Pos.Cord.y*m_cellWidth) + m_yShift : (m_level.Player.Pos.Cord.y*m_cellWidth - m_level.Player.Pos.Cord.y*m_yOffset) + m_yShift,
               width:m_cellWidth,
               height:m_cellHeight),
             Color.Red);
           m_spriteBatch.End();
           base.Draw(gameTime);
+
         }
-        //
-        // private void onMoveUp(GameTime gameTime, float value)
-        // {
-        //   m_player.updatePosition(m_mazeGrid.move(m_player.getCord(), Direction.North));
-        // }
-        //
-        // private void onMoveDown(GameTime gameTime, float value)
-        // {
-        //   m_player.updatePosition(m_mazeGrid.move(m_player.getCord(), Direction.South));
-        // }
-        //
-        // private void onMoveLeft(GameTime gameTime, float value)
-        // {
-        //   m_player.updatePosition(m_mazeGrid.move(m_player.getCord(), Direction.West));
-        // }
-        //
-        // private void onMoveRight(GameTime gameTime, float value)
-        // {
-        //   m_player.updatePosition(m_mazeGrid.move(m_player.getCord(), Direction.East));
-        // }
+
+        private void onMoveUp(GameTime gameTime, float value)
+        {
+          m_level.MovePlayer(Direction.North);
+        }
+
+        private void onMoveDown(GameTime gameTime, float value)
+        {
+          m_level.MovePlayer(Direction.South);
+        }
+
+        private void onMoveLeft(GameTime gameTime, float value)
+        {
+          m_level.MovePlayer(Direction.West);
+        }
+
+        private void onMoveRight(GameTime gameTime, float value)
+        {
+          m_level.MovePlayer(Direction.East);
+        }
+
         private void onFive(GameTime gameTime, float value)
         {
           m_level = m_mazeGenerator.Generate(5, 5);
@@ -173,6 +204,16 @@ namespace CS5410
         {
           m_level = m_mazeGenerator.Generate(20, 20);
           CalculateLevelScreenSizing();
+        }
+
+        private void onHint(GameTime gameTime, float value)
+        {
+          m_showHint = !m_showHint;
+        }
+
+        private void onPath(GameTime gameTime, float value)
+        {
+          m_showPath = !m_showPath;
         }
     }
 }

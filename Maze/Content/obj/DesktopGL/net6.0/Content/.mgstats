@@ -1,5 +1,8 @@
 Source File,Dest File,Processor Type,Content Type,Source File Size,Dest File Size,Build Seconds
+"/Users/skyler/School/GameDev/Maze/Maze/Content/images/goal.png","/Users/skyler/School/GameDev/Maze/Maze/Content/bin/DesktopGL/Content/images/goal.xnb","TextureProcessor","Texture2DContent",619,40085,0.091351
 "/Users/skyler/School/GameDev/Maze/Maze/Content/images/player.png","/Users/skyler/School/GameDev/Maze/Maze/Content/bin/DesktopGL/Content/images/player.xnb","TextureProcessor","Texture2DContent",585,40085,0.089846
+"/Users/skyler/School/GameDev/Maze/Maze/Content/images/start.png","/Users/skyler/School/GameDev/Maze/Maze/Content/bin/DesktopGL/Content/images/start.xnb","TextureProcessor","Texture2DContent",620,40085,0.001056
+"/Users/skyler/School/GameDev/Maze/Maze/Content/images/trail.png","/Users/skyler/School/GameDev/Maze/Maze/Content/bin/DesktopGL/Content/images/trail.xnb","TextureProcessor","Texture2DContent",496,40085,0.001228
 "/Users/skyler/School/GameDev/Maze/Maze/Content/images/wall-0.png","/Users/skyler/School/GameDev/Maze/Maze/Content/bin/DesktopGL/Content/images/wall-0.xnb","TextureProcessor","Texture2DContent",555,40085,0.086438
 "/Users/skyler/School/GameDev/Maze/Maze/Content/images/wall-1.png","/Users/skyler/School/GameDev/Maze/Maze/Content/bin/DesktopGL/Content/images/wall-1.xnb","TextureProcessor","Texture2DContent",641,40085,0.091864
 "/Users/skyler/School/GameDev/Maze/Maze/Content/images/wall-10.png","/Users/skyler/School/GameDev/Maze/Maze/Content/bin/DesktopGL/Content/images/wall-10.xnb","TextureProcessor","Texture2DContent",549,40085,0.002039

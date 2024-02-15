@@ -41,3 +41,6 @@
 /Users/skyler/School/GameDev/Maze/Maze/bin/Debug/net6.0/Content/images/player.xnb
 /Users/skyler/School/GameDev/Maze/Maze/obj/Debug/net6.0/Maze.sourcelink.json
 /Users/skyler/School/GameDev/Maze/Maze/bin/Debug/net6.0/Content/images/wall-15.xnb
+/Users/skyler/School/GameDev/Maze/Maze/bin/Debug/net6.0/Content/images/goal.xnb
+/Users/skyler/School/GameDev/Maze/Maze/bin/Debug/net6.0/Content/images/start.xnb
+/Users/skyler/School/GameDev/Maze/Maze/bin/Debug/net6.0/Content/images/trail.xnb
