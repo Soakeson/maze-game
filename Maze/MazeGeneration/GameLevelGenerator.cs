@@ -14,7 +14,7 @@ public interface IGameLevel
 {
   public int Height { get; set; }
   public int Width { get; set; }
-  public Dictionary<(int x, int y), Cell> Field { get; set; }
+  public Dictionary<(int x, int y), Cell> Field { get; }
 
   internal static (int x, int y) AddCord((int x, int y) c1, (int x, int y) c2)
   {

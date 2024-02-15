@@ -142,6 +142,20 @@ namespace CS5410
             }
           }
 
+          if (m_showHint)
+          {
+            Cell top;
+            if (m_level.Path.TryPeek(out top))
+            {
+              m_spriteBatch.Draw(trailTexture, new Rectangle( 
+                    x: top.Cord.x == 0 ? (top.Cord.x*m_cellWidth) + m_xShift : (top.Cord.x*m_cellWidth - top.Cord.x*m_xOffset) + m_xShift,
+                    y: top.Cord.y == 0 ? (top.Cord.y*m_cellWidth) + m_yShift : (top.Cord.y*m_cellWidth - top.Cord.y*m_yOffset) + m_yShift,
+                    width:m_cellWidth,
+                    height:m_cellHeight),
+                  Color.White);
+            }
+          }
+
           // goal rendering
           m_spriteBatch.Draw(goalTexture, new Rectangle( 
               x: ((m_level.Width - 1)*m_cellWidth - (m_level.Width - 1)*m_xOffset) + m_xShift,
@@ -209,11 +223,15 @@ namespace CS5410
         private void onHint(GameTime gameTime, float value)
         {
           m_showHint = !m_showHint;
+          // if path active turn it off
+          if (m_showPath) m_showPath = !m_showPath;
         }
 
         private void onPath(GameTime gameTime, float value)
         {
           m_showPath = !m_showPath;
+          // if hint active turn it off
+          if (m_showHint) m_showHint = !m_showHint;
         }
     }
 }

@@ -8,8 +8,8 @@ public class MazeLevel : IGameLevel
     public Stack<Cell> Path { get; set; }
     public Cell Start;
     public Cell End;
-    public Dictionary<(int x, int y), Cell> Field { get; set; }
-    public Player Player { get; set; }
+    public Dictionary<(int x, int y), Cell> Field { get; }
+    public Player Player { get; }
 
     public MazeLevel(int h, int w, Dictionary<(int x, int y), Cell> f)
     {
@@ -85,7 +85,7 @@ public class MazeLevel : IGameLevel
           {
             Cell next = Field[(IGameLevel.AddCord(Player.Pos.Cord, CordOffset.NORTH))];
             UpdatePath(next);
-            Player.Pos = next;
+            Player.SetPos(next);
           }
         break;
         case Direction.South:
@@ -93,7 +93,7 @@ public class MazeLevel : IGameLevel
           {
             Cell next = Field[(IGameLevel.AddCord(Player.Pos.Cord, CordOffset.SOUTH))];
             UpdatePath(next);
-            Player.Pos = next;
+            Player.SetPos(next);
           }
         break;
         case Direction.East:
@@ -101,7 +101,7 @@ public class MazeLevel : IGameLevel
           {
             Cell next = Field[(IGameLevel.AddCord(Player.Pos.Cord, CordOffset.EAST))];
             UpdatePath(next);
-            Player.Pos = next;
+            Player.SetPos(next);
           }
         break;
         case Direction.West:
@@ -109,10 +109,11 @@ public class MazeLevel : IGameLevel
           {
             Cell next = Field[(IGameLevel.AddCord(Player.Pos.Cord, CordOffset.WEST))];
             UpdatePath(next);
-            Player.Pos = next;
+            Player.SetPos(next);
           }
         break;
       }
+      Console.WriteLine(Player.Score);
     }
 
     private void UpdatePath(Cell next)
@@ -122,10 +123,12 @@ public class MazeLevel : IGameLevel
       {
         if (onPath.Cord == next.Cord)
         {
+          Player.Score += !Player.History.ContainsKey(next.Cord) ? 5 : 0;
           Path.Pop();
         }
         else
         {
+          Player.Score += !Player.History.ContainsKey(next.Cord) ? -3 : 0;
           Path.Push(Player.Pos);
         }
       }
