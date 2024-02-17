@@ -8,6 +8,7 @@ public class MazeLevel : IGameLevel
     public Stack<Cell> Path { get; set; }
     public Cell Start;
     public Cell End;
+    public bool Won = false;
     public Dictionary<(int x, int y), Cell> Field { get; }
     public Player Player { get; }
 
@@ -113,7 +114,10 @@ public class MazeLevel : IGameLevel
           }
         break;
       }
-      Console.WriteLine(Player.Score);
+      if (Player.Pos.Cord == End.Cord)
+      {
+        Won = true;
+      }
     }
 
     private void UpdatePath(Cell next)

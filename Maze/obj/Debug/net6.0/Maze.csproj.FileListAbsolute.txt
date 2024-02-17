@@ -44,3 +44,4 @@
 /Users/skyler/School/GameDev/Maze/Maze/bin/Debug/net6.0/Content/images/goal.xnb
 /Users/skyler/School/GameDev/Maze/Maze/bin/Debug/net6.0/Content/images/start.xnb
 /Users/skyler/School/GameDev/Maze/Maze/bin/Debug/net6.0/Content/images/trail.xnb
+/Users/skyler/School/GameDev/Maze/Maze/bin/Debug/net6.0/Content/images/bread.xnb

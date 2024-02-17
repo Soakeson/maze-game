@@ -2,7 +2,6 @@
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using CS5410.Input;
-using System;
 
 namespace CS5410
 {
@@ -21,11 +20,13 @@ namespace CS5410
         private int m_xShift;
         private int m_yShift;
         private bool m_showPath = false;
+        private bool m_showBreadcrumb = false;
         private bool m_showHint = false;
         private Texture2D[] wallTexturePool = new Texture2D[16];
         private Texture2D playerTexture;
         private Texture2D startTexture;
         private Texture2D trailTexture;
+        private Texture2D breadTexture;
         private Texture2D goalTexture;
         private KeyboardInput m_inputKeyboard;
 
@@ -81,6 +82,8 @@ namespace CS5410
             m_inputKeyboard.registerCommand(Keys.F4, true, new IInputDevice.CommandDelegate(onTwenty));
             m_inputKeyboard.registerCommand(Keys.H, true, new IInputDevice.CommandDelegate(onHint));
             m_inputKeyboard.registerCommand(Keys.P, true, new IInputDevice.CommandDelegate(onPath));
+            m_inputKeyboard.registerCommand(Keys.B, true, new IInputDevice.CommandDelegate(onBreadcrumb));
+
             m_graphics.ApplyChanges();
             base.Initialize();
         }
@@ -95,7 +98,7 @@ namespace CS5410
             playerTexture = this.Content.Load<Texture2D>("images/player");
             trailTexture = this.Content.Load<Texture2D>("images/trail");
             goalTexture = this.Content.Load<Texture2D>("images/goal");
-            startTexture = this.Content.Load<Texture2D>("images/start");
+            breadTexture = this.Content.Load<Texture2D>("images/bread");
         }
 
         protected override void Update(GameTime gameTime)
@@ -105,8 +108,12 @@ namespace CS5410
                 Exit();
             }
 
-            m_inputKeyboard.Update(gameTime);
-            // TODO: Add your update logic here
+            if (m_level.Won)
+            {
+              m_level = m_mazeGenerator.Generate(m_level.Width, m_level.Height);
+              CalculateLevelScreenSizing();
+            }
+            processInput(gameTime);
             base.Update(gameTime);
         }
 
@@ -126,6 +133,19 @@ namespace CS5410
                   width:m_cellWidth,
                   height:m_cellHeight),
                 Color.White);
+            }
+          }
+
+          if (m_showBreadcrumb)
+          {
+            foreach(((int x, int y) Cord, Cell bread) in m_level.Player.History)
+            {
+              m_spriteBatch.Draw(breadTexture, new Rectangle( 
+                    x: bread.Cord.x == 0 ? (bread.Cord.x*m_cellWidth) + m_xShift : (bread.Cord.x*m_cellWidth - bread.Cord.x*m_xOffset) + m_xShift,
+                    y: bread.Cord.y == 0 ? (bread.Cord.y*m_cellWidth) + m_yShift : (bread.Cord.y*m_cellWidth - bread.Cord.y*m_yOffset) + m_yShift,
+                    width:m_cellWidth,
+                    height:m_cellHeight),
+                  Color.White);
             }
           }
 
@@ -174,6 +194,11 @@ namespace CS5410
           m_spriteBatch.End();
           base.Draw(gameTime);
 
+        }
+
+        private void processInput(GameTime gameTime)
+        {
+            m_inputKeyboard.Update(gameTime);
         }
 
         private void onMoveUp(GameTime gameTime, float value)
@@ -232,6 +257,11 @@ namespace CS5410
           m_showPath = !m_showPath;
           // if hint active turn it off
           if (m_showHint) m_showHint = !m_showHint;
+        }
+
+        private void onBreadcrumb(GameTime gameTime, float value)
+        {
+          m_showBreadcrumb = !m_showBreadcrumb;
         }
     }
 }

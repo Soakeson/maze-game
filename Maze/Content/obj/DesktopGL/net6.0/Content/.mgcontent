@@ -6,6 +6,7 @@
   <SourceFiles>
     <File>/Users/skyler/School/GameDev/Maze/Maze/Content/images/player.png</File>
     <File>/Users/skyler/School/GameDev/Maze/Maze/Content/images/goal.png</File>
+    <File>/Users/skyler/School/GameDev/Maze/Maze/Content/images/bread.png</File>
     <File>/Users/skyler/School/GameDev/Maze/Maze/Content/images/trail.png</File>
     <File>/Users/skyler/School/GameDev/Maze/Maze/Content/images/start.png</File>
     <File>/Users/skyler/School/GameDev/Maze/Maze/Content/images/wall-0.png</File>
@@ -26,6 +27,7 @@
     <File>/Users/skyler/School/GameDev/Maze/Maze/Content/images/wall-15.png</File>
   </SourceFiles>
   <DestFiles>
+    <File xsi:nil="true" />
     <File xsi:nil="true" />
     <File xsi:nil="true" />
     <File xsi:nil="true" />

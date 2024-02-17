@@ -20,6 +20,11 @@
 /processor:TextureProcessor
 /build:images/goal.png
 
+#begin images/goal.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/build:images/bread.png
+
 #begin images/trail.png
 /importer:TextureImporter
 /processor:TextureProcessor
