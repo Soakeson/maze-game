@@ -10,6 +10,13 @@
 
 #-------------------------------- References --------------------------------#
 
+#begin Fonts/Micro5.spritefont
+/importer:FontDescriptionImporter
+/processor:FontDescriptionProcessor
+/processorParam:PremultiplyAlpha=True
+/processorParam:TextureFormat=Compressed
+/build:Fonts/Micro5.spritefont
+
 #begin images/player.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -114,5 +121,6 @@
 /importer:TextureImporter
 /processor:TextureProcessor
 /build:images/wall-15.png
+
 #---------------------------------- Content ---------------------------------#
 

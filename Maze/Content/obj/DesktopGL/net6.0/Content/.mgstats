@@ -1,4 +1,5 @@
 Source File,Dest File,Processor Type,Content Type,Source File Size,Dest File Size,Build Seconds
+"/Users/skyler/School/GameDev/Maze/Maze/Content/Fonts/Micro5.spritefont","/Users/skyler/School/GameDev/Maze/Maze/Content/bin/DesktopGL/Content/Fonts/Micro5.xnb","FontDescriptionProcessor","SpriteFontContent",2084,37919,0.147774
 "/Users/skyler/School/GameDev/Maze/Maze/Content/images/bread.png","/Users/skyler/School/GameDev/Maze/Maze/Content/bin/DesktopGL/Content/images/bread.xnb","TextureProcessor","Texture2DContent",535,40085,0.093164
 "/Users/skyler/School/GameDev/Maze/Maze/Content/images/goal.png","/Users/skyler/School/GameDev/Maze/Maze/Content/bin/DesktopGL/Content/images/goal.xnb","TextureProcessor","Texture2DContent",652,40085,0.086785
 "/Users/skyler/School/GameDev/Maze/Maze/Content/images/player.png","/Users/skyler/School/GameDev/Maze/Maze/Content/bin/DesktopGL/Content/images/player.xnb","TextureProcessor","Texture2DContent",585,40085,0.089846

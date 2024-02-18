@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using System;
 using CS5410.Input;
 
 namespace CS5410
@@ -11,8 +12,8 @@ namespace CS5410
         private SpriteBatch m_spriteBatch;
         private MazeLevelGenerator m_mazeGenerator;
         private MazeLevel m_level;
-        private int m_screenWidth = 1920/2;
-        private int m_screenHeight = 1080/2;
+        private int m_screenWidth = 1920;
+        private int m_screenHeight = 1080;
         private int m_cellWidth;
         private int m_cellHeight;
         private int m_xOffset;
@@ -21,13 +22,17 @@ namespace CS5410
         private int m_yShift;
         private bool m_showPath = false;
         private bool m_showBreadcrumb = false;
+        private bool m_showCredits = false;
         private bool m_showHint = false;
+        private int m_highScore = 0;
         private Texture2D[] wallTexturePool = new Texture2D[16];
         private Texture2D playerTexture;
         private Texture2D startTexture;
         private Texture2D trailTexture;
         private Texture2D breadTexture;
         private Texture2D goalTexture;
+        private TimeSpan genTimestamp; 
+        private SpriteFont font;
         private KeyboardInput m_inputKeyboard;
 
         public Maze()
@@ -80,6 +85,8 @@ namespace CS5410
             m_inputKeyboard.registerCommand(Keys.F2, true, new IInputDevice.CommandDelegate(onTen));
             m_inputKeyboard.registerCommand(Keys.F3, true, new IInputDevice.CommandDelegate(onFifteen));
             m_inputKeyboard.registerCommand(Keys.F4, true, new IInputDevice.CommandDelegate(onTwenty));
+            m_inputKeyboard.registerCommand(Keys.F5, true, new IInputDevice.CommandDelegate(onCredits));
+
             m_inputKeyboard.registerCommand(Keys.H, true, new IInputDevice.CommandDelegate(onHint));
             m_inputKeyboard.registerCommand(Keys.P, true, new IInputDevice.CommandDelegate(onPath));
             m_inputKeyboard.registerCommand(Keys.B, true, new IInputDevice.CommandDelegate(onBreadcrumb));
@@ -99,6 +106,7 @@ namespace CS5410
             trailTexture = this.Content.Load<Texture2D>("images/trail");
             goalTexture = this.Content.Load<Texture2D>("images/goal");
             breadTexture = this.Content.Load<Texture2D>("images/bread");
+            font = this.Content.Load<SpriteFont>("Fonts/Micro5");
         }
 
         protected override void Update(GameTime gameTime)
@@ -110,7 +118,12 @@ namespace CS5410
 
             if (m_level.Won)
             {
+              if (m_level.Player.Score > m_highScore)
+              {
+                m_highScore = m_level.Player.Score;
+              }
               m_level = m_mazeGenerator.Generate(m_level.Width, m_level.Height);
+              genTimestamp = gameTime.TotalGameTime;
               CalculateLevelScreenSizing();
             }
             processInput(gameTime);
@@ -136,16 +149,51 @@ namespace CS5410
             }
           }
 
+          // menu rendering
+          m_spriteBatch.DrawString(
+              font,
+              "Time: " + (gameTime.TotalGameTime.Seconds - genTimestamp.Seconds) + 
+              "\nCurrent: " + m_level.Player.Score.ToString() + 
+              "\nHigh: " + m_highScore.ToString(),
+              new Vector2(
+                m_screenWidth - 200,
+                20),
+              Color.White
+              );
+
+          m_spriteBatch.DrawString(
+              font,
+              "<Esc>: Exit \n<P>: Path \n<H>: Hint \n<B>: Bread Crumbs \n<F1>: 5X5 \n<F2>: 10X10 \n<F3>: 15X15 \n<F4>: 20X20 \n<F5>: Credits ",
+              new Vector2(
+                40,
+                20),
+              Color.White
+              );
+
+          if (m_showCredits)
+          {
+            m_spriteBatch.DrawString(
+                font,
+                "Created By:\n Skyler Oakeson \nFont: Micro5",
+                new Vector2(
+                  50,
+                  400),
+                Color.White
+                );
+          }
+
           if (m_showBreadcrumb)
           {
             foreach(((int x, int y) Cord, Cell bread) in m_level.Player.History)
             {
-              m_spriteBatch.Draw(breadTexture, new Rectangle( 
-                    x: bread.Cord.x == 0 ? (bread.Cord.x*m_cellWidth) + m_xShift : (bread.Cord.x*m_cellWidth - bread.Cord.x*m_xOffset) + m_xShift,
-                    y: bread.Cord.y == 0 ? (bread.Cord.y*m_cellWidth) + m_yShift : (bread.Cord.y*m_cellWidth - bread.Cord.y*m_yOffset) + m_yShift,
-                    width:m_cellWidth,
-                    height:m_cellHeight),
-                  Color.White);
+              if (Cord != m_level.Player.Pos.Cord){
+                m_spriteBatch.Draw(breadTexture, new Rectangle( 
+                      x: bread.Cord.x == 0 ? (bread.Cord.x*m_cellWidth) + m_xShift : (bread.Cord.x*m_cellWidth - bread.Cord.x*m_xOffset) + m_xShift,
+                      y: bread.Cord.y == 0 ? (bread.Cord.y*m_cellWidth) + m_yShift : (bread.Cord.y*m_cellWidth - bread.Cord.y*m_yOffset) + m_yShift,
+                      width:m_cellWidth,
+                      height:m_cellHeight),
+                    Color.White);
+              }
             }
           }
 
@@ -223,24 +271,28 @@ namespace CS5410
 
         private void onFive(GameTime gameTime, float value)
         {
+          genTimestamp = gameTime.TotalGameTime;
           m_level = m_mazeGenerator.Generate(5, 5);
           CalculateLevelScreenSizing();
         }
 
         private void onTen(GameTime gameTime, float value)
         {
+          genTimestamp = gameTime.TotalGameTime;
           m_level = m_mazeGenerator.Generate(10, 10);
           CalculateLevelScreenSizing();
         }
 
         private void onFifteen(GameTime gameTime, float value)
         {
+          genTimestamp = gameTime.TotalGameTime;
           m_level = m_mazeGenerator.Generate(15, 15);
           CalculateLevelScreenSizing();
         }
 
         private void onTwenty(GameTime gameTime, float value)
         {
+          genTimestamp = gameTime.TotalGameTime;
           m_level = m_mazeGenerator.Generate(20, 20);
           CalculateLevelScreenSizing();
         }
@@ -262,6 +314,11 @@ namespace CS5410
         private void onBreadcrumb(GameTime gameTime, float value)
         {
           m_showBreadcrumb = !m_showBreadcrumb;
+        }
+
+        private void onCredits(GameTime gameTime, float value)
+        {
+          m_showCredits = !m_showCredits;
         }
     }
 }

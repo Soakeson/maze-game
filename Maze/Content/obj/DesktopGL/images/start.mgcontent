@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PipelineBuildEvent xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <SourceFile>/Users/skyler/School/GameDev/Maze/Maze/Content/images/start.png</SourceFile>
+  <SourceTime>2024-02-14T09:07:58.0062889-07:00</SourceTime>
+  <DestFile>/Users/skyler/School/GameDev/Maze/Maze/Content/bin/DesktopGL/images/start.xnb</DestFile>
+  <DestTime>2024-02-17T13:26:11.0696323-07:00</DestTime>
+  <Importer>TextureImporter</Importer>
+  <ImporterTime>2022-07-26T05:44:56-06:00</ImporterTime>
+  <Processor>TextureProcessor</Processor>
+  <ProcessorTime>2022-07-26T05:44:56-06:00</ProcessorTime>
+  <Dependencies />
+  <BuildAsset />
+  <BuildOutput />
+</PipelineBuildEvent>

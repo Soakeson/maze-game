@@ -11,6 +11,7 @@ public class Player
     Pos = start;
     Score = 0;
     History = new Dictionary<(int x, int y), Cell>();
+    History.Add(Pos.Cord, Pos);
   }
 
   public void SetPos(Cell newPos)
